@@ -1,0 +1,110 @@
+h1 {
+	/* credits go to https://www.iconfinder.com/icons/1807127/document_extension_format_mkv_paper_icon */
+	background: url("mkv.png") left top no-repeat;
+	background-size: contain;
+	line-height: 1.3em;
+	padding-left: 1.4em;
+}
+
+thead, tbody {
+	text-align: left;
+}
+
+thead, section[role="overview"] {
+	background-color: rgba(0,0,255,.085);
+}
+
+label, input[type="checkbox"] {
+	cursor: pointer;
+}
+
+section[role="overview"] {
+	padding: 1ex;
+}
+section[role="overview"] ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+section[role="overview"] ul li:not(:last-child) {
+	margin-bottom: 1ex;
+}
+section[role="overview"] ul li > span {
+	font-weight: 900;
+	display: block;
+	margin-bottom: .5ex;
+}
+section[role="overview"] ul li > code {
+	margin-left: 1.25em;
+	background-color: #fff;
+	padding: .25ex 1ex;
+}
+div.options-row > span {
+	font-weight: 900;
+	margin: 1ex 0 .5ex;
+	display: block;
+}
+div.options-row fieldset {
+	display: block;
+	background-color: rgba(0,0,255,.02);
+	margin-left: 1.25em;
+}
+
+th {
+	vertical-align: top;
+}
+
+th[role="checkmark"], td[role="checkmark"] {
+	width: 1em;
+}
+th[role="name"], td[role="name"] {
+	width: 30em;
+	max-width: 40%;
+}
+th[role="dir"], td[role="dir"] {
+	width: 30em;
+	max-width: 40%;
+}
+th[role="size"], td[role="size"] {
+	text-align: right;
+	width: 5.25em;
+}
+th[role="quality"], td[role="quality"] {
+	text-align: right;
+	width: 6em;
+}
+tbody tr:nth-child(odd) {
+	background-color:#eee;
+}
+
+thead tr:not([role="filtering"]) th input, thead tr:not([role="filtering"]) th select {
+	width: 100%;
+	box-sizing: border-box;
+	text-align: inherit;
+}
+
+thead tr[role="filtering"] {
+	background-color: #fff;
+	text-align: right;
+}
+thead tr[role="filtering"] th {
+	vertical-align: bottom;
+}
+thead tr[role="filtering"] th[role="active-filters"] {
+	text-align: left;
+}
+thead tr[role="filtering"] th[role="active-filters"] div {
+	font-weight: initial;
+}
+
+code, .code {
+	font-family: Consolas, "Courier New", Courier, monospace;
+}
+div[role="audio-details"] > div,
+div[role="subs-details"] > div {
+	margin-bottom: .3ex;
+}
+div[role="audio-details"] > div:last-child,
+div[role="subs-details"] > div:last-child {
+	margin-bottom: 0;
+}
