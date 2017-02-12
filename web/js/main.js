@@ -51,6 +51,14 @@ app.controller("Ctrl", ['$http', '$timeout', function($http, $timeout) {
 			.map(t => { t.language = t.language || 'eng'; return t; })
 			.sort();
 		m.subTracksNames = m.subTracks.map(t => t.language).join(', ');
+
+		m.headString = Object.keys(m.head).map(key => {
+			return `${key}${m.head[key] ? ': ' + m.head[key] : ''}`;
+		}).join("\n"); // shown in <pre/>
+
+		m.segInfoString = Object.keys(m.segInfo).map(key => {
+			return `${key}${m.segInfo[key] ? ': ' + m.segInfo[key] : ''}`;
+		}).join("\n"); // shown in <pre/>
 	}
 
 	this.sizeTotal = this.mkvs.map(m => m.fileSize).reduce((p, c) => p + c, 0);
@@ -129,7 +137,9 @@ app.controller("Ctrl", ['$http', '$timeout', function($http, $timeout) {
 			name = this.filterName.toLowerCase(),
 			dir = this.filterDir.toLowerCase(),
 			q = this.filterQ.toLowerCase(),
-			audio = this.filterAudio.toLowerCase();
+			audio = this.filterAudio.toLowerCase(),
+			head = this.filterHead.toLowerCase(),
+			segInfo = this.filterSegInfo.toLowerCase();
 
 		this.mkvsFiltered = this.mkvs.filter(m => {
 			const sizeLimit = isNaN(parseInt(this.filterSize)) ? Number.MAX_SAFE_INTEGER : parseInt(this.filterSize, 10) * 1e6;
@@ -142,6 +152,8 @@ app.controller("Ctrl", ['$http', '$timeout', function($http, $timeout) {
 					(q === 'fhd' ? m.isFullHd || m.is4K :
 					(q === '4k' ? m.is4K : false))
 					) : true)
+				&& (!!head ? m.headString.toLowerCase().indexOf(head) >= 0 : true)
+				&& (!!segInfo ? m.segInfoString.toLowerCase().indexOf(segInfo) >= 0 : true)
 				&& (
 					(this.showMovies && this.showMovies === m.isMovie)
 					|| (this.showSeries && this.showSeries === m.isShow)
