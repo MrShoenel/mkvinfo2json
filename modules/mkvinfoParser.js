@@ -124,6 +124,18 @@ class MkvInfoParser {
 	};
 
 	processSegmentInfoLine(line) {
+		if (line.indexOf(':') === -1) {
+			this.info.segInfo[line] = null;
+			return;
+		}
+
+		if (/^[^(:]*\([^)]+:[^)]+\)[^)]*$/.test(line)) {
+			// e.g. matches "EbmlVoid (size: 4324)" instead of splitting it at ":"
+			// but does not match "Duration: 5769.560s (01:36:09.560)"
+			this.info.segInfo[line] = null;
+			return;
+		}
+
 		const sp = MkvInfoParser.singleSplit(line);
 		if (sp.length !== 2) {
 			return;
