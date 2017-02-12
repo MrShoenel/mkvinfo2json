@@ -138,6 +138,7 @@ app.controller("Ctrl", ['$http', '$timeout', function($http, $timeout) {
 			dir = this.filterDir.toLowerCase(),
 			q = this.filterQ.toLowerCase(),
 			audio = this.filterAudio.toLowerCase(),
+			subs = this.filterSubs.toLowerCase(),
 			head = this.filterHead.toLowerCase(),
 			segInfo = this.filterSegInfo.toLowerCase();
 
@@ -147,6 +148,7 @@ app.controller("Ctrl", ['$http', '$timeout', function($http, $timeout) {
 				&& (!!name ? m.name.toLowerCase().indexOf(name) >= 0 : true)
 				&& (!!dir ? m.dirName.toLowerCase().indexOf(dir) >= 0 : true)
 				&& (!!audio ? m.audioTracksNames.toLowerCase().indexOf(audio) >= 0 : true)
+				&& (!!subs ? m.subTracksNames.toLowerCase().indexOf(subs) >= 0 : true)
 				&& (!!q ? (
 					q === 'hd' ? m.isHd || m.isFullHd || m.is4K :
 					(q === 'fhd' ? m.isFullHd || m.is4K :
