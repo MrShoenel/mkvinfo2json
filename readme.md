@@ -39,5 +39,6 @@ That is how MKV Overview presently looks. It's neither very pretty nor is it opt
 
 
 # History
+* **v1.1.3** Small update to fix the non-working filter for subtitles
 * **v1.1.2** Contains a schema-definition for the JSON generated/interpreted and uses a JSONP-file with default `.js`-extension by default for better compatibility. Also improved the parsing of `segInfo`-blocks for MKV files. MKV Overview can now display and filter `Head`- and `SegInfo`-blocks.
 * **v1.0.0** Initial release
