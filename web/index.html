@@ -11,7 +11,7 @@
 			window.jsonp = json => window.json = json;
 			const s = document.createElement('script'),
 				s1 = document.createElement('script');
-			s.src = 'motion.jsonp?r=' + Math.random();
+			s.src = 'motion.js?r=' + Math.random();
 			document.head.appendChild(s);
 			s.onload = () => {
 				document.head.appendChild(s1);
@@ -56,6 +56,10 @@
 					<label for="col-size">Size</label>
 					<input type="checkbox" checked ng-model="vm.colLinks" ng-init="vm.colLinks = true;" id="col-links" />
 					<label for="col-links">IMDb/Wiki Links</label>
+					<input type="checkbox" ng-model="vm.colHead" ng-init="vm.colHead = false;" id="col-head" />
+					<label for="col-head">MKV-Header Info</label>
+					<input type="checkbox" ng-model="vm.colSegInfo" ng-init="vm.colSegInfo = false;" id="col-segInfo" />
+					<label for="col-segInfo">MKV-Segment Info</label>
 					
 					<br><br>
 					<label for="audio-details">Audio-Details:</label>
@@ -146,7 +150,7 @@
 			<table ng-cloak>
 				<thead>
 					<tr role="filtering">
-						<th colspan="2" role="active-filters" ng-show="vm.filterName || vm.filterDir || vm.filterAudio || vm.filterSubs || vm.filterQ || vm.filterSize">
+						<th colspan="2" role="active-filters" ng-show="vm.filterName || vm.filterDir || vm.filterAudio || vm.filterSubs || vm.filterQ || vm.filterSize || vm.filterHead || vm.filterSegInfo">
 							Filters active:
 							<div>
 								<div ng-if="vm.filterName">Name = <code>"{{ vm.filterName }}"</code></div>
@@ -155,6 +159,8 @@
 								<div ng-if="vm.filterSubs">Subtitles = <code>"{{ vm.filterSubs }}"</code></div>
 								<div ng-if="vm.filterQ">Quality = <code>"{{ vm.filterQ }}"</code></div>
 								<div ng-if="vm.filterSize">Size = <code>"{{ vm.filterSize }}"</code></div>
+								<div ng-if="vm.filterHead">Head = <code>"{{ vm.filterHead }}"</code></div>
+								<div ng-if="vm.filterSegInfo">SegInfo = <code>"{{ vm.filterSegInfo }}"</code></div>
 							</div>
 						</th>
 						<th colspan="999">
@@ -184,6 +190,8 @@
 						<th ng-show="vm.colSize" role="size">Size</th>
 						<th rowspan="2" ng-show="vm.colLinks">IMDb</th>
 						<th rowspan="2" ng-show="vm.colLinks">Wiki</th>
+						<th ng-show="vm.colHead">Header</th>
+						<th ng-show="vm.colSegInfo">Segm.-Info</th>
 					</tr>
 					<tr>
 						<th role="name">
@@ -209,6 +217,12 @@
 						<th ng-show="vm.colSize" role="size">
 							<input type="text" placeholder="Limit (MB)" ng-model="vm.filterSize" ng-init="vm.filterSize = '';" ng-change="vm.filter()" />
 						</th>
+						<th ng-show="vm.colHead">
+							<input type="text" placeholder="Type to filter.." ng-model="vm.filterHead" ng-init="vm.filterHead = '';" ng-change="vm.filter()" />
+						</th>
+						<th ng-show="vm.colSegInfo">
+							<input type="text" placeholder="Type to filter.." ng-model="vm.filterSegInfo" ng-init="vm.filterSegInfo = '';" ng-change="vm.filter()" />
+						</th>
 					</tr>
 				</thead>
 
@@ -218,27 +232,36 @@
 							<input type="checkbox" ng-model="mkv.ui.selected" ng-init="mkv.ui.selected = false;" id="mkv-selected-{{ mkv.aiId }}" ng-change="vm.updateSelected()" />
 						</td>
 						<td role="name"><label for="mkv-selected-{{ mkv.aiId }}">{{ mkv.name }}</label></td>
-						<td ng-show="vm.colDura">{{ mkv.duration | duration }}</td>
-						<td role="dir" ng-show="vm.colDir">{{ mkv.dirName }}</td>
-						<td ng-show="vm.colAudio">
+						<td ng-if="vm.colDura">{{ mkv.duration | duration }}</td>
+						<td role="dir" ng-if="vm.colDir">{{ mkv.dirName }}</td>
+						<td ng-if="vm.colAudio">
 							<span ng-if="vm.audioDisplay == 'names'">{{ mkv.audioTracksNames }}</span>
 							<div role="audio-details" class="code" ng-if="vm.audioDisplay == 'details'">
 								<div ng-repeat="t in mkv.audioTracks">♫ {{ t.language }}, {{ t.codecId }}, Ch./Freq: {{ t.channels }}/{{ t.sampFreq }}</div>
 							</div>
 						</td>
-						<td ng-show="vm.colSubs">
+						<td ng-if="vm.colSubs">
 							<span ng-if="vm.subsDisplay == 'names'">{{ mkv.subTracksNames }}</span>
 							<div role="subs-details" class="code" ng-if="vm.subsDisplay == 'details'">
 								<div ng-repeat="t in mkv.subTracks">&para; {{ t.language }}, {{ t.codecId }}</div>
 							</div>
 						</td>
-						<td role="quality" ng-show="vm.colQ">{{ mkv.isHd ? 'HD' : (mkv.isFullHd ? 'FullHD' : (mkv.is4K ? '4K' : mkv.videoTrack.pxWidth + 'x' + mkv.videoTrack.pxHeight)) }}</td>
-						<td ng-show="vm.colSize" role="size">{{ mkv.fileSize | fileSize }}</td>
-						<th ng-show="vm.colLinks"><a target="_blank" href="https://www.google.com/search?q=IMDb {{mkv.name}}">IMDb</a></th>
-						<th ng-show="vm.colLinks"><a target="_blank" href="https://www.google.com/search?q=wikipedia {{mkv.name}}">Wiki</a></th>
+						<td role="quality" ng-if="vm.colQ">{{ mkv.isHd ? 'HD' : (mkv.isFullHd ? 'FullHD' : (mkv.is4K ? '4K' : mkv.videoTrack.pxWidth + 'x' + mkv.videoTrack.pxHeight)) }}</td>
+						<td ng-if="vm.colSize" role="size">{{ mkv.fileSize | fileSize }}</td>
+						<td ng-if="vm.colLinks"><a target="_blank" href="https://www.google.com/search?q=IMDb {{mkv.name}}">IMDb</a></td>
+						<td ng-if="vm.colLinks"><a target="_blank" href="https://www.google.com/search?q=wikipedia {{mkv.name}}">Wiki</a></td>
+						<td ng-if="vm.colHead">
+							<pre>{{ mkv.headString }}</pre>
+							<!--<div ng-repeat="(key, value) in mkv.head">{{ key }}<span ng-if="value">: {{ value }}</span></div>-->
+						</td>
+						<td ng-if="vm.colSegInfo">
+							<pre>{{ mkv.segInfoString }}</pre>
+							<!--<div ng-repeat="(key, value) in mkv.segInfo">{{ key }}<span ng-if="value">: {{ value }}</span></div>-->
+						</td>
 					</tr>
 				</tbody>
 			</table>
+			<hr>
     </div>
   </body>
 </html>

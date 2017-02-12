@@ -5,6 +5,9 @@ h1 {
 	line-height: 1.3em;
 	padding-left: 1.4em;
 }
+pre {
+	margin: 0;
+}
 
 thead, tbody {
 	text-align: left;
