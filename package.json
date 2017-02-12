@@ -1,6 +1,6 @@
 {
   "name": "mkvinfo2json",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "description": "MkvInfo2Json is a tool to recursively scan directories for MKV files and extract meta-information using mkvinfo that is then stored as JSON.",
   "main": "index.js",
   "scripts": {},
